@@ -24,10 +24,10 @@ import type { Product } from "@/lib/types";
 import ProductTile from "../ProductTile";
 
 const STARTERS: Starter[] = [
-  { icon: "search", prompt: "A tent for a first family camping trip, under $250" },
-  { icon: "home", prompt: "Set up a home office in a small spare room for about $800" },
-  { icon: "tag", prompt: "Drip or espresso for busy weekday mornings?" },
-  { icon: "edit", prompt: "Remember: small apartment, no outdoor storage, and a golden retriever" },
+  { icon: "search", prompt: "Show me all available products" },
+  { icon: "tag", prompt: "Find me something under €50" },
+  { icon: "home", prompt: "I'm looking for a gift for a friend" },
+  { icon: "edit", prompt: "What are your most popular items?" },
 ];
 
 /** What the store is featuring: labelled bestseller or new, photographed ones first. */
