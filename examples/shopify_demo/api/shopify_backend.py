@@ -543,3 +543,84 @@ class ShopifyBackend(StorefrontBackend):
             FulfillmentOption(method="delivery", eta="3-5 business days", fee=5.99),
             FulfillmentOption(method="delivery", eta="1-2 business days (express)", fee=12.99),
         ]
+
+    # ------------------------------------------------------------------
+    # Full catalog — search_products only fetches what a query matches, but the
+    # merchant portal (inventory alerts, browse, SQL analysis) needs the whole
+    # store. This walks products(first, after) rather than search(), and fills
+    # self.products the same way search/get_product_details do.
+    # ------------------------------------------------------------------
+
+    _CATALOG_PAGE_QUERY = """
+    query CatalogPage($first: Int!, $after: String) @inContext(country: PT) {
+      products(first: $first, after: $after) {
+        pageInfo { hasNextPage endCursor }
+        nodes {
+          id
+          title
+          vendor
+          productType
+          tags
+          description
+          descriptionHtml
+          availableForSale
+          priceRange {
+            minVariantPrice { amount currencyCode }
+          }
+          images(first: 5) {
+            nodes { url }
+          }
+          variants(first: 50) {
+            nodes {
+              id
+              title
+              price { amount currencyCode }
+              availableForSale
+              selectedOptions { name value }
+              image { url }
+            }
+          }
+        }
+      }
+    }
+    """
+
+    async def list_catalog(
+        self, *, page_size: int = 50, max_products: int = 250
+    ) -> list[ProductDetails]:
+        """Fetch every product (paginated), caching each into ``self.products`` exactly
+        as ``search_products``/``get_product_details`` do. Call once at merchant-backend
+        startup and again whenever the portal needs a fresher view; there is no
+        change-notification from Shopify here, so staleness is bounded by how often the
+        caller re-fetches, not tracked automatically."""
+        collected: list[ProductDetails] = []
+        cursor: str | None = None
+        while len(collected) < max_products:
+            data = await self._gql(
+                self._CATALOG_PAGE_QUERY,
+                {"first": min(page_size, max_products - len(collected)), "after": cursor},
+            )
+            page = data.get("products", {})
+            for node in page.get("nodes", []):
+                if not node.get("id"):
+                    continue
+                collected.append(self._map_product_details(node))
+            page_info = page.get("pageInfo", {})
+            if not page_info.get("hasNextPage"):
+                break
+            cursor = page_info.get("endCursor")
+        return collected
+
+    # ------------------------------------------------------------------
+    # DemoStorefront protocol extras (demo_common.host) — required to mount the
+    # shared merchant portal router alongside the storefront routes.
+    # ------------------------------------------------------------------
+
+    def reset_session(self, session_id: str) -> None:
+        self._session_carts.pop(session_id, None)
+
+    async def recent_orders(self, limit: int = 6) -> list[Order]:
+        # Order history lives in Shopify's Admin API, which this demo backend does not
+        # call (only the Storefront API). The merchant portal's "recent orders" panel
+        # reads the merchant backend's own orders.json instead — see api/merchant.py.
+        return []

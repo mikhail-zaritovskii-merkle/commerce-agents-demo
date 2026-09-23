@@ -1,0 +1,71 @@
+{
+  "_comment": "Campaign windows are authored as if dates_anchored_to were today; demo_common.merchant_fixtures.load_campaigns shifts them forward by whole weeks at load time, same as merchant_metrics.json.",
+  "dates_anchored_to": "2026-09-23",
+  "campaigns": [
+    {
+      "campaign_id": "C-201",
+      "name": "Autumn Capsule Launch",
+      "status": "active",
+      "objective": "Introduce the new outerwear capsule ahead of the seasonal switch",
+      "channel": "social ads",
+      "budget": 1200.0,
+      "spend": 640.0,
+      "revenue": 2380.0,
+      "currency": "EUR",
+      "starts": "2026-09-11",
+      "ends": "2026-10-09"
+    },
+    {
+      "campaign_id": "C-202",
+      "name": "Back to Basics",
+      "status": "active",
+      "objective": "Push core essentials (tees, denim) to new visitors",
+      "channel": "storefront search placements",
+      "budget": 600.0,
+      "spend": 512.0,
+      "revenue": 1490.0,
+      "currency": "EUR",
+      "starts": "2026-09-03",
+      "ends": "2026-09-21"
+    },
+    {
+      "campaign_id": "C-203",
+      "name": "Weekend Flash Sale",
+      "status": "ended",
+      "objective": "Clear slow-moving accessories inventory over a single weekend",
+      "channel": "email to past buyers",
+      "budget": 250.0,
+      "spend": 250.0,
+      "revenue": null,
+      "currency": "EUR",
+      "starts": "2026-08-19",
+      "ends": "2026-08-21"
+    },
+    {
+      "campaign_id": "C-204",
+      "name": "Loyalty Members Early Access",
+      "status": "paused",
+      "objective": "Give returning customers first pick of the new footwear line",
+      "channel": "email to past buyers",
+      "budget": 400.0,
+      "spend": 180.0,
+      "revenue": 960.0,
+      "currency": "EUR",
+      "starts": "2026-09-18",
+      "ends": "2026-10-02"
+    },
+    {
+      "campaign_id": "C-205",
+      "name": "New Arrivals - Outerwear",
+      "status": "draft",
+      "objective": "Awareness push once the outerwear restock lands",
+      "channel": "social ads",
+      "budget": 800.0,
+      "spend": null,
+      "revenue": null,
+      "currency": "EUR",
+      "starts": "2026-09-30",
+      "ends": "2026-10-21"
+    }
+  ]
+}

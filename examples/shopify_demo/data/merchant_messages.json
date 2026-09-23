@@ -1,0 +1,60 @@
+{
+  "_comment": "opened_at is shifted forward by whole weeks at load time relative to dates_anchored_to (demo_common.merchant_fixtures.load_issues), same as merchant_metrics.json. Author dates as if dates_anchored_to were today.",
+  "dates_anchored_to": "2026-09-23",
+  "issues": [
+    {
+      "issue_id": "ISS-101",
+      "order_id": "DL-90002",
+      "kind": "delayed",
+      "listing_id": "DL-1009",
+      "summary": "Carrier shows the wool coat held at the regional depot for four days",
+      "buyer_message_excerpt": "Tracking hasn't moved since Friday. When should I expect this?",
+      "opened_at": "2026-09-20T09:15:00Z"
+    },
+    {
+      "issue_id": "ISS-102",
+      "order_id": "DL-90008",
+      "kind": "return_spike",
+      "listing_id": "DL-1018",
+      "summary": "Four returns on the ankle boots this week, all citing sizing running small",
+      "buyer_message_excerpt": "Had to size up two full sizes - these run really narrow.",
+      "opened_at": "2026-09-21T14:40:00Z"
+    },
+    {
+      "issue_id": "ISS-103",
+      "order_id": "DL-90007",
+      "kind": "buyer_message",
+      "listing_id": "DL-1002",
+      "summary": "Buyer asks whether the denim jacket runs true to size before reordering",
+      "buyer_message_excerpt": "Does this run true to size? I cancelled my last order over sizing doubts.",
+      "opened_at": "2026-09-22T11:05:00Z"
+    },
+    {
+      "issue_id": "ISS-104",
+      "order_id": "DL-90009",
+      "kind": "damaged",
+      "listing_id": "DL-1006",
+      "summary": "Tote bag arrived with a torn strap seam",
+      "buyer_message_excerpt": "The strap was already ripped at one corner when it arrived.",
+      "opened_at": "2026-09-21T16:20:00Z"
+    },
+    {
+      "issue_id": "ISS-105",
+      "order_id": "DL-90010",
+      "kind": "return_spike",
+      "listing_id": "DL-1015",
+      "summary": "Rain jacket seeing a higher-than-usual refund rate this month",
+      "buyer_message_excerpt": "It's not actually waterproof, soaked through in light rain.",
+      "opened_at": "2026-09-18T08:50:00Z"
+    },
+    {
+      "issue_id": "ISS-106",
+      "order_id": "DL-90003",
+      "kind": "buyer_message",
+      "listing_id": "DL-1014",
+      "summary": "Buyer asks about restock timing on the slim fit jeans in their size",
+      "buyer_message_excerpt": "Size 30 has been out of stock for weeks - any restock date?",
+      "opened_at": "2026-09-19T10:00:00Z"
+    }
+  ]
+}
