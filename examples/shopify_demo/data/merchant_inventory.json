@@ -1,0 +1,121 @@
+{
+  "default_stock": 40,
+  "default_threshold": 8,
+  "inventory": [
+    {
+      "product_id": "DL-1018",
+      "stock": 13,
+      "threshold": 10,
+      "sales_last_30d": 34,
+      "unit_cost": 69.18
+    },
+    {
+      "product_id": "DL-1010",
+      "stock": 54,
+      "threshold": 6,
+      "sales_last_30d": 7,
+      "unit_cost": 15.28
+    },
+    {
+      "product_id": "DL-1004",
+      "stock": 2,
+      "threshold": 6,
+      "sales_last_30d": 23,
+      "unit_cost": 38.24
+    },
+    {
+      "product_id": "DL-1015",
+      "stock": 16,
+      "threshold": 8,
+      "sales_last_30d": 49,
+      "unit_cost": 58.12
+    },
+    {
+      "product_id": "DL-1003",
+      "stock": 35,
+      "threshold": 6,
+      "sales_last_30d": 9,
+      "unit_cost": 32.79
+    },
+    {
+      "product_id": "DL-1005",
+      "stock": 57,
+      "threshold": 8,
+      "sales_last_30d": 36,
+      "unit_cost": 60.67
+    },
+    {
+      "product_id": "DL-1002",
+      "stock": 35,
+      "threshold": 8,
+      "sales_last_30d": 29,
+      "unit_cost": 37.87
+    },
+    {
+      "product_id": "DL-1012",
+      "stock": 57,
+      "threshold": 6,
+      "sales_last_30d": 24,
+      "unit_cost": 43.76
+    },
+    {
+      "product_id": "DL-1009",
+      "stock": 6,
+      "threshold": 10,
+      "sales_last_30d": 51,
+      "unit_cost": 96.76
+    },
+    {
+      "product_id": "DL-1014",
+      "stock": 39,
+      "threshold": 8,
+      "sales_last_30d": 17,
+      "unit_cost": 39.53
+    },
+    {
+      "product_id": "DL-1013",
+      "stock": 51,
+      "threshold": 8,
+      "sales_last_30d": 28,
+      "unit_cost": 23.89
+    },
+    {
+      "product_id": "DL-1017",
+      "stock": 21,
+      "threshold": 12,
+      "sales_last_30d": 53,
+      "unit_cost": 11.75
+    },
+    {
+      "product_id": "DL-1008",
+      "stock": 15,
+      "threshold": 10,
+      "sales_last_30d": 12,
+      "unit_cost": 35.68,
+      "content_quality": "needs_work",
+      "missing_attributes": [
+        "material",
+        "fit guide"
+      ]
+    },
+    {
+      "product_id": "DL-1011",
+      "stock": 14,
+      "threshold": 8,
+      "sales_last_30d": 54,
+      "unit_cost": 46.11
+    },
+    {
+      "product_id": "DL-1007",
+      "stock": 52,
+      "threshold": 8,
+      "sales_last_30d": 16,
+      "unit_cost": 21.86,
+      "content_quality": "needs_work",
+      "missing_attributes": [
+        "care instructions",
+        "fit guide"
+      ]
+    }
+  ]
+}

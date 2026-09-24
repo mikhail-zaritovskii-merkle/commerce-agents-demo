@@ -1,0 +1,195 @@
+{
+  "_comment": "In-flight orders (processing/shipped/out_for_delivery/delayed) are re-dated at load time relative to dates_anchored_to, so estimates stay current. Author their dates as if dates_anchored_to were today.",
+  "dates_anchored_to": "2026-09-23",
+  "orders": [
+    {
+      "order_id": "DL-90001",
+      "status": "shipped",
+      "placed_at": "2026-09-17T00:00:00Z",
+      "items": [
+        {
+          "product_id": "DL-1004",
+          "title": "Everyday Sneakers",
+          "quantity": 1,
+          "price": 69.0
+        },
+        {
+          "product_id": "DL-1010",
+          "title": "Minimalist Leather Belt",
+          "quantity": 1,
+          "price": 29.0
+        }
+      ],
+      "total": 98.0,
+      "currency": "EUR",
+      "tracking_url": "https://track.example.com/DL-90001",
+      "estimated_delivery": "2026-09-26"
+    },
+    {
+      "order_id": "DL-90002",
+      "status": "delayed",
+      "placed_at": "2026-09-13T00:00:00Z",
+      "items": [
+        {
+          "product_id": "DL-1009",
+          "title": "Wool Blend Coat",
+          "quantity": 2,
+          "price": 189.0
+        }
+      ],
+      "total": 378.0,
+      "currency": "EUR",
+      "tracking_url": "https://track.example.com/DL-90002",
+      "estimated_delivery": "2026-09-28"
+    },
+    {
+      "order_id": "DL-90003",
+      "status": "delivered",
+      "placed_at": "2026-09-09T00:00:00Z",
+      "items": [
+        {
+          "product_id": "DL-1001",
+          "title": "Classic Cotton Tee",
+          "quantity": 1,
+          "price": 24.9
+        },
+        {
+          "product_id": "DL-1014",
+          "title": "Slim Fit Jeans",
+          "quantity": 2,
+          "price": 69.0
+        }
+      ],
+      "total": 162.9,
+      "currency": "EUR",
+      "tracking_url": "https://track.example.com/DL-90003"
+    },
+    {
+      "order_id": "DL-90004",
+      "status": "processing",
+      "placed_at": "2026-09-22T00:00:00Z",
+      "items": [
+        {
+          "product_id": "DL-1005",
+          "title": "Leather Chelsea Boots",
+          "quantity": 2,
+          "price": 149.0
+        }
+      ],
+      "total": 298.0,
+      "currency": "EUR",
+      "tracking_url": "https://track.example.com/DL-90004",
+      "estimated_delivery": "2026-09-26"
+    },
+    {
+      "order_id": "DL-90005",
+      "status": "out_for_delivery",
+      "placed_at": "2026-09-21T00:00:00Z",
+      "items": [
+        {
+          "product_id": "DL-1011",
+          "title": "Structured Crossbody Bag",
+          "quantity": 1,
+          "price": 79.0
+        }
+      ],
+      "total": 79.0,
+      "currency": "EUR",
+      "tracking_url": "https://track.example.com/DL-90005",
+      "estimated_delivery": "2026-09-24"
+    },
+    {
+      "order_id": "DL-90006",
+      "status": "delivered",
+      "placed_at": "2026-09-02T00:00:00Z",
+      "items": [
+        {
+          "product_id": "DL-1003",
+          "title": "Merino Wool Sweater",
+          "quantity": 1,
+          "price": 79.0
+        },
+        {
+          "product_id": "DL-1017",
+          "title": "Knit Beanie",
+          "quantity": 1,
+          "price": 22.0
+        }
+      ],
+      "total": 101.0,
+      "currency": "EUR",
+      "tracking_url": "https://track.example.com/DL-90006"
+    },
+    {
+      "order_id": "DL-90007",
+      "status": "cancelled",
+      "placed_at": "2026-09-15T00:00:00Z",
+      "items": [
+        {
+          "product_id": "DL-1002",
+          "title": "Relaxed Denim Jacket",
+          "quantity": 2,
+          "price": 89.0
+        }
+      ],
+      "total": 178.0,
+      "currency": "EUR",
+      "tracking_url": "https://track.example.com/DL-90007"
+    },
+    {
+      "order_id": "DL-90008",
+      "status": "return_initiated",
+      "placed_at": "2026-09-08T00:00:00Z",
+      "items": [
+        {
+          "product_id": "DL-1018",
+          "title": "Leather Ankle Boots",
+          "quantity": 1,
+          "price": 139.0
+        }
+      ],
+      "total": 139.0,
+      "currency": "EUR",
+      "tracking_url": "https://track.example.com/DL-90008"
+    },
+    {
+      "order_id": "DL-90009",
+      "status": "shipped",
+      "placed_at": "2026-09-20T00:00:00Z",
+      "items": [
+        {
+          "product_id": "DL-1006",
+          "title": "Canvas Tote Bag",
+          "quantity": 1,
+          "price": 34.0
+        },
+        {
+          "product_id": "DL-1016",
+          "title": "Everyday Baseball Cap",
+          "quantity": 1,
+          "price": 19.0
+        }
+      ],
+      "total": 53.0,
+      "currency": "EUR",
+      "tracking_url": "https://track.example.com/DL-90009",
+      "estimated_delivery": "2026-09-28"
+    },
+    {
+      "order_id": "DL-90010",
+      "status": "refunded",
+      "placed_at": "2026-08-29T00:00:00Z",
+      "items": [
+        {
+          "product_id": "DL-1015",
+          "title": "Waterproof Rain Jacket",
+          "quantity": 1,
+          "price": 119.0
+        }
+      ],
+      "total": 119.0,
+      "currency": "EUR",
+      "tracking_url": "https://track.example.com/DL-90010"
+    }
+  ]
+}

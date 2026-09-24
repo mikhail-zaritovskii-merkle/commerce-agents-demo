@@ -1,6 +1,8 @@
-"""Shopify demo API: a real Shopify store behind the shared storefront routes.
+"""Shopify demo API: a real Shopify store behind the shared storefront routes, plus the
+merchant portal (MerchantBackend over the same Shopify catalog) under /api/merchant.
 
     uvicorn shopify_demo.api.main:app --app-dir examples --reload --port 8000
+    (cd examples/shopify_demo/merchant-web && npm run dev)   # :3100, once that app exists
 
 Set SHOPIFY_STORE_DOMAIN and SHOPIFY_STOREFRONT_TOKEN in .env before running.
 """
@@ -20,6 +22,7 @@ from demo_common import (
 from shopping_agent import ShoppingAgentConfig
 from shopping_agent_runtime import ShoppingAgent
 
+from .merchant import create_merchant_router
 from .shopify_backend import ShopifyBackend
 
 EXAMPLE_DIR = Path(__file__).resolve().parent.parent
@@ -58,6 +61,7 @@ host = build_storefront_host(
     ),
 )
 app = host.app
+app.include_router(create_merchant_router(backend, InMemoryMemoryStore()), prefix="/api/merchant")
 
 
 @app.post("/api/cart/add")
