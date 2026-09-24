@@ -64,6 +64,15 @@ app = host.app
 app.include_router(create_merchant_router(backend, InMemoryMemoryStore()), prefix="/api/merchant")
 
 
+@app.on_event("startup")
+async def _warm_merchant_catalog() -> None:
+    # ShopifyMerchantBackend.all_listings() is synchronous (the shared merchant router
+    # calls it without `await`, matching examples/retail/api/mock_merchant.py's own
+    # sync all_listings()), so the catalog has to already be populated by the time any
+    # request can reach it — fetch it once here, before uvicorn starts accepting traffic.
+    await backend.list_catalog()
+
+
 @app.post("/api/cart/add")
 async def cart_add(request: CartAddRequest, record: host.CurrentSession) -> dict:
     return await host.direct_add(

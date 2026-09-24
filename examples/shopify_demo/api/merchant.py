@@ -131,17 +131,16 @@ class ShopifyMerchantBackend(MerchantBackend):
             row["order_id"]: row for row in orders_raw["orders"]
         }
 
-        self._catalog_loaded = False
-
     # ------------------------------------------------------------------
     # Catalog prefetch — see module docstring
     # ------------------------------------------------------------------
 
     async def _ensure_catalog(self) -> None:
-        if self._catalog_loaded:
+        """Idempotent: based on whether the catalog is already populated, not a separate
+        flag, so a prefetch done elsewhere (see main.py's startup hook) is honored too."""
+        if self.storefront.products:
             return
         await self.storefront.list_catalog()
-        self._catalog_loaded = True
 
     def _product(self, listing_id: str) -> ProductDetails | None:
         return self.storefront.product(listing_id)
@@ -203,8 +202,12 @@ class ShopifyMerchantBackend(MerchantBackend):
             variant_of=product.variant_of,
         )
 
-    async def all_listings(self) -> list[Listing]:
-        await self._ensure_catalog()
+    def all_listings(self) -> list[Listing]:
+        """Synchronous, matching the DemoMerchant protocol (the shared router calls this
+        without ``await`` — the reference mock_merchant.py's version is sync too, since
+        its catalog is preloaded at construction). Relies on the catalog already being
+        populated — either by main.py's startup hook, or by an earlier ``_ensure_catalog()``
+        call from one of this class's own async methods."""
         listings = [
             listing
             for product_id in self.storefront.products
@@ -718,7 +721,7 @@ class ShopifyMerchantBackend(MerchantBackend):
         sqlite3 connections are thread-affine, so a connection opened here would fail
         the moment ``asyncio.to_thread`` ran a query against it on a worker thread."""
         await self._ensure_catalog()
-        listings = await self.all_listings()
+        listings = self.all_listings()
         listing_rows = [
             (
                 listing.listing_id,
