@@ -9,6 +9,7 @@ Set SHOPIFY_STORE_DOMAIN and SHOPIFY_STOREFRONT_TOKEN in .env before running.
 
 from __future__ import annotations
 
+import contextlib
 from pathlib import Path
 
 from commerce_common.memory import InMemoryMemoryStore
@@ -61,16 +62,24 @@ host = build_storefront_host(
     ),
 )
 app = host.app
-app.include_router(create_merchant_router(backend, InMemoryMemoryStore()), prefix="/api/merchant")
+
+# `build_storefront_host` gives its FastAPI app a `lifespan=` context manager (for
+# seeding memory at boot) — and once an app has `lifespan=`, the older `@app.on_event`
+# API is simply never called, no error, no warning. So instead of `@app.on_event`,
+# wrap the existing lifespan: warm the merchant catalog first, then hand off to it.
+_host_lifespan = app.router.lifespan_context
 
 
-@app.on_event("startup")
-async def _warm_merchant_catalog() -> None:
-    # ShopifyMerchantBackend.all_listings() is synchronous (the shared merchant router
-    # calls it without `await`, matching examples/retail/api/mock_merchant.py's own
-    # sync all_listings()), so the catalog has to already be populated by the time any
-    # request can reach it — fetch it once here, before uvicorn starts accepting traffic.
+@contextlib.asynccontextmanager
+async def _lifespan_with_catalog_warmup(app: FastAPI):
     await backend.list_catalog()
+    async with _host_lifespan(app):
+        yield
+
+
+app.router.lifespan_context = _lifespan_with_catalog_warmup
+
+app.include_router(create_merchant_router(backend, InMemoryMemoryStore()), prefix="/api/merchant")
 
 
 @app.post("/api/cart/add")
