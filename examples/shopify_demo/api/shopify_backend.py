@@ -171,6 +171,13 @@ class ShopifyBackend(StorefrontBackend):
             variants=variants if has_real_options else [],
         )
         self.products[details.product_id] = details
+        # Each variant only lives inside `details.variants` above — cache it by its own
+        # id too, or `self.product(variant_id)` (and merchant.py's alerts/pricing/stock
+        # logic, which looks a variant up by its own id) can never resolve it: every
+        # variant would silently read back as "not found", and a family product's real
+        # per-size/per-color stock would never be visible.
+        for v in variants:
+            self.variants[v.product_id] = v
         return details
 
     # ------------------------------------------------------------------
@@ -287,7 +294,7 @@ class ShopifyBackend(StorefrontBackend):
     """
 
     def product(self, product_id: str) -> ProductDetails | None:
-        return self.products.get(product_id)
+        return self.products.get(product_id) or self.variants.get(product_id)
 
     async def get_product_details(
         self, session: ShoppingSessionContext, product_id: str

@@ -376,30 +376,35 @@ class ShopifyMerchantBackend(MerchantBackend):
         # defaults otherwise), same as _listing()/all_listings() already do.
         for product_id in self.storefront.products:
             product = self._product(product_id)
-            if product is None or product.has_options:
+            if product is None:
                 continue
-            row = self._state_row(product_id)
-            stock = int(row.get("stock", self._default_stock))
-            threshold = int(row.get("threshold", self._default_threshold))
-            sales_30d = row.get("sales_last_30d")
-            daily_pace = (sales_30d or 0) / 30
-            listing = self._listing(product_id)
-            visible = listing is not None and listing.status == "active" and stock > 0
-            if stock <= threshold:
-                alerts.append(
-                    InventoryAlert(
-                        listing_id=product_id,
-                        title=product.title,
-                        kind="low_stock",
-                        option_values=product.option_values,
-                        variant_of=product.variant_of,
-                        stock=stock,
-                        threshold=threshold,
-                        days_of_cover=round(stock / daily_pace, 1) if daily_pace else None,
-                        sales_last_30d=sales_30d,
-                        storefront_visible=visible,
+            # A family product (has_options) carries no stock of its own — each size/
+            # color variant does. Check every variant individually rather than skipping
+            # the family outright, or a fully sold-out family would never alert at all.
+            targets = product.variants if product.has_options else [product]
+            for target in targets:
+                row = self._state_row(target.product_id)
+                stock = int(row.get("stock", self._default_stock))
+                threshold = int(row.get("threshold", self._default_threshold))
+                sales_30d = row.get("sales_last_30d")
+                daily_pace = (sales_30d or 0) / 30
+                listing = self._listing(target.product_id)
+                visible = listing is not None and listing.status == "active" and stock > 0
+                if stock <= threshold:
+                    alerts.append(
+                        InventoryAlert(
+                            listing_id=target.product_id,
+                            title=product.title,
+                            kind="low_stock",
+                            option_values=target.option_values,
+                            variant_of=target.variant_of,
+                            stock=stock,
+                            threshold=threshold,
+                            days_of_cover=round(stock / daily_pace, 1) if daily_pace else None,
+                            sales_last_30d=sales_30d,
+                            storefront_visible=visible,
+                        )
                     )
-                )
         alerts.sort(key=lambda alert: (alert.kind != "low_stock", -(alert.sales_last_30d or 0)))
         return alerts
 
