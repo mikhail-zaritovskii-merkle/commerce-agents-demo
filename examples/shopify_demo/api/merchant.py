@@ -147,14 +147,19 @@ class ShopifyMerchantBackend(MerchantBackend):
 
     def _state_row(self, product_id: str) -> dict[str, Any]:
         """The inventory row for a plain listing or a variant, defaulted on first touch
-        from the live Shopify price (not from any local catalog, since we have none)."""
+        from the live Shopify price and stock signal (not from any local catalog, since
+        we have none). Seeding ``stock`` from ``product.in_stock`` — rather than always
+        assuming ``default_stock`` — matters: without it, a real Shopify product with no
+        fixture entry would default to "40 in stock" even when Shopify itself says it's
+        out of stock, until someone happened to touch it via a restock/pause action."""
         product = self._product(product_id)
         key = product.product_id if product else product_id
         if key not in self._inventory:
             plain = product is not None and not product.has_options
+            in_stock = product.in_stock if product else False
             self._inventory[key] = {
                 "product_id": key,
-                "stock": self._default_stock if plain else 0,
+                "stock": (self._default_stock if in_stock else 0) if plain else 0,
                 "threshold": self._default_threshold,
                 "sales_last_30d": None,
                 "unit_cost": round(product.price * 0.55, 2) if plain and product else None,
@@ -364,10 +369,16 @@ class ShopifyMerchantBackend(MerchantBackend):
     async def _compute_alerts(self) -> list[InventoryAlert]:
         await self._ensure_catalog()
         alerts: list[InventoryAlert] = []
-        for product_id, row in self._inventory.items():
+        # Walk the REAL catalog, not just the fixture's inventory rows — the fixture's
+        # placeholder IDs (DL-1001...) don't match live Shopify product IDs, so iterating
+        # self._inventory.items() directly would silently see nothing. _state_row()
+        # still resolves each real product's overlay row (fixture data if present, sane
+        # defaults otherwise), same as _listing()/all_listings() already do.
+        for product_id in self.storefront.products:
             product = self._product(product_id)
             if product is None or product.has_options:
                 continue
+            row = self._state_row(product_id)
             stock = int(row.get("stock", self._default_stock))
             threshold = int(row.get("threshold", self._default_threshold))
             sales_30d = row.get("sales_last_30d")
