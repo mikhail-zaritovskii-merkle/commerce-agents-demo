@@ -619,8 +619,12 @@ class ShopifyBackend(StorefrontBackend):
     def reset_session(self, session_id: str) -> None:
         self._session_carts.pop(session_id, None)
 
-    async def recent_orders(self, limit: int = 6) -> list[Order]:
+    def recent_orders(self, limit: int = 6) -> list[Order]:
         # Order history lives in Shopify's Admin API, which this demo backend does not
         # call (only the Storefront API). The merchant portal's "recent orders" panel
         # reads the merchant backend's own orders.json instead — see api/merchant.py.
+        # Sync on purpose: the shared merchant router calls this without ``await``
+        # (matching examples/retail/api/mock_retail.py's own recent_orders, which is
+        # sync too) — the DemoStorefront Protocol's "async def" in host.py doesn't match
+        # how it's actually called, so the real contract is: keep this synchronous.
         return []
